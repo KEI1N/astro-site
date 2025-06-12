@@ -1,0 +1,23 @@
+---
+import fs from 'fs';
+import path from 'path';
+
+const postsDir = path.resolve('../../content/posts');
+const posts = fs.readdirSync(postsDir).map(filename => {
+  const content = fs.readFileSync(path.join(postsDir, filename), 'utf-8');
+  const [, titleLine] = content.match(/title: "(.+?)"/) || [];
+  return { title: titleLine, filename };
+});
+---
+
+<html>
+  <head><title>AI News Agency</title></head>
+  <body>
+    <h1>Новости</h1>
+    <ul>
+      {posts.map(p => (
+        <li><a href={`/posts/${p.filename.replace('.md', '')}`}>{p.title}</a></li>
+      ))}
+    </ul>
+  </body>
+</html>
